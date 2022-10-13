@@ -1,0 +1,110 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Check luarocks",
+			"type": "shell",
+			"command": "luacheck .",
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Install luarocks",
+			"type": "shell",
+			"command": "make lua_rocks_install",
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Compile moon",
+			"type": "shell",
+			"command": "make compile",
+			"args": [
+				"--verbose"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Test Task",
+			"type": "shell",
+			"command": "make test",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "markdown: Transform inline links to reference-style links",
+			"type": "shell",
+			"command": "npx remark",
+			"args": [
+				"${file}",
+				"--use remark-link-reference-style",
+				"--output"
+			],
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Shortens a URL",
+			"type": "shell",
+			"command": "snip",
+			"args": [
+				"${input:url}"
+			]
+		},
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "node",
+			"dockerBuild": {
+				"dockerfile": "${workspaceFolder}/app/Dockerfile",
+				"context": "${workspaceFolder}/app",
+				"pull": true
+			},
+			"node": {
+				"package": "${workspaceFolder}/app/package.json"
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: release",
+			"dependsOn": [
+				"docker-build"
+			],
+			"platform": "node",
+			"node": {
+				"package": "${workspaceFolder}/app/package.json"
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: debug",
+			"dependsOn": [
+				"docker-build"
+			],
+			"dockerRun": {
+				"env": {
+					"DEBUG": "*",
+					"NODE_ENV": "development"
+				}
+			},
+			"node": {
+				"package": "${workspaceFolder}/app/package.json",
+				"enableDebugging": true
+			}
+		}
+	]
+}
