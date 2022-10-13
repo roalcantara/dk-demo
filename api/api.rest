@@ -1,0 +1,39 @@
+# REST Client
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@id = 6348a08eb49772a8c8c8beb0
+@id2 = 6348a08eb49772a8c8c8beb1
+@host = localhost:3001
+
+### GET http://{{host}}/api
+GET http://{{host}}/api HTTP/1.1
+
+### GET http://{{host}}/api/tasks
+GET http://{{host}}/api/tasks HTTP/1.1
+
+### GET http://{{host}}/api/tasks/all
+GET http://{{host}}/api/tasks/all HTTP/1.1
+
+### GET http://{{host}}/api/tasks/:id
+GET http://{{host}}/api/tasks/{{id}} HTTP/1.1
+
+### POST http://{{host}}/api/tasks
+POST http://{{host}}/api/tasks HTTP/1.1
+Content-Type: application/json
+
+{ 
+  "title": "Setup Taskwarrior", 
+  "done": false
+}
+
+### PUT http://{{host}}/api/tasks/:id
+PUT http://{{host}}/api/tasks/{{id2}} HTTP/1.1
+Content-Type: application/json
+
+{ 
+  "title": "Pay Bills", 
+  "done": true
+}
+
+### DELETE http://{{host}}/api/tasks/:id
+DELETE http://{{host}}/api/tasks/{{id}} HTTP/1.1

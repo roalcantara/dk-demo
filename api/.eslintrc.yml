@@ -1,0 +1,136 @@
+---
+root: true
+env:
+  es2021: true
+  node: true
+  browser: true
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+  project: ./tsconfig.*?.json
+  createDefaultProgram: true
+ignorePatterns:
+  - "**/*"
+plugins:
+  - "@nrwl/nx"
+  - '@typescript-eslint'
+  - eslint-comments
+  - 'no-loops'
+extends:
+  - airbnb-typescript/base
+  - plugin:@typescript-eslint/recommended
+  - plugin:import/errors
+  - plugin:import/warnings
+  - plugin:import/typescript
+  - plugin:eslint-comments/recommended
+  - plugin:prettier/recommended
+  - plugin:node/recommended
+overrides:
+  - files:
+      - "*.ts"
+      - "*.tsx"
+      - "*.js"
+      - "*.jsx"
+    rules:
+      "@nrwl/nx/enforce-module-boundaries":
+        - error
+        - enforceBuildableLibDependency: true
+          allow: []
+          depConstraints:
+            - sourceTag: "*"
+              onlyDependOnLibsWithTags:
+                - "*"
+  - files:
+      - "*.ts"
+      - "*.tsx"
+    extends:
+      - plugin:@nrwl/nx/typescript
+    rules:
+      # core
+      node/no-missing-import: off
+      node/no-unsupported-features/es-syntax:
+        - error
+        - version: '>=16.15.0'
+          ignores:
+            - modules
+      no-console: 0
+      consistent-return: 0
+      quotes:
+        - error
+        - single
+        - avoidEscape: true
+          allowTemplateLiterals: true
+
+      # variables
+      no-unused-vars: 0
+
+      # style
+      object-curly-newline: 0
+      lines-between-class-members: 0
+      implicit-arrow-linebreak: 0
+      arrow-body-style:
+        - error
+        - as-needed
+
+      # import
+      import/extensions: off
+      import/named: off
+      import/default: off
+      import/namespace: off
+      import/no-unresolved: off
+      import/group-exports: off
+      import/no-named-export: off
+      import/no-named-as-default: off
+      import/no-named-as-default-member: off
+
+      import/first: error
+      import/no-amd: error
+      import/no-duplicates: error
+      import/no-self-import: error
+      import/no-absolute-path: error
+      import/no-named-default: error
+      import/no-mutable-exports: error
+      import/newline-after-import: error
+      import/order:
+        - error
+        - groups:
+            - builtin
+            - external
+            - internal
+          newlines-between: never
+          alphabetize:
+            order: asc
+            caseInsensitive: false
+
+      # no-loops
+      no-loops/no-loops: 2
+
+      # comments
+      eslint-comments/disable-enable-pair: off
+
+      # typescript
+      '@typescript-eslint/lines-between-class-members': off
+  - files:
+      - '*.spec.ts*'
+      - '*.config.js'
+    extends:
+      - plugin:jest/style
+      - plugin:jest/recommended
+      - plugin:jest-formatting/recommended
+    env:
+      jest/globals: true
+  - files:
+      - '*.spec.ts*'
+      - '*.config.js'
+      - '**/__mocks__/**/*.ts'
+      - '**/tests/**/*.ts'
+      - '**/__factories__/**/*.ts'
+    rules:
+      '@typescript-eslint/no-explicit-any': off
+      import/no-default-export: 0
+      tree-shaking/no-side-effects-in-initialization: 0
+      import/no-extraneous-dependencies:
+        - error
+        - devDependencies: true
+      node/no-unpublished-import: off
