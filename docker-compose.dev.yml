@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+  api:
+    depends_on:
+      - mongodb
+    build: 
+      context: api
+      target: base
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - 3001
+    ports:
+      - 3001:3001
+    environment:
+      - DB_HOST=mongodb
+      - DB_USR=$MONGODB_USER
+      - DB_PWD=$MONGODB_PASSWORD
+      - DB_NAME=$MONGODB_DATABASE
+      - DB_PORT=$MONGODB_DOCKER_PORT
+      - PORT=3001
+      - HOST=localhost
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./api/src:/usr/src/app/src
+    command: npm run dev
+  app:
+    depends_on:
+      - api
+    build: 
+      context: app
+      target: base
+    restart: unless-stopped
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_HOST=localhost
+      - REACT_APP_API_PORT=3001
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./app/src:/usr/src/app/src
+    command: npm run dev
+
+volumes:
+  db:
+    driver: local
