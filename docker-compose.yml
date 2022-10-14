@@ -35,6 +35,23 @@ services:
     stdin_open: true
     tty: true
     command: npm run start
+  app:
+    depends_on:
+      - api
+    build: 
+      context: app
+      target: production
+    restart: unless-stopped
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_HOST=localhost
+      - REACT_APP_API_PORT=3001
+    stdin_open: true
+    tty: true
+    command: npm run start
 
 volumes:
   db:

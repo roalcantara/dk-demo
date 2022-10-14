@@ -1,0 +1,11 @@
+---
+# Prettier: an opinionated code formatter
+# https://prettier.io/
+semi: false
+singleQuote: true
+bracketSpacing: true
+trailingComma: 'none'
+arrowParens: 'avoid'
+# see .editorConfig
+#   tabWidth: 2
+#   useTabs: false
